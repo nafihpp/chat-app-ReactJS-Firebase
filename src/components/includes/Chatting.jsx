@@ -6,6 +6,8 @@ import {
     where,
     doc,
     updateDoc,
+    orderBy,
+    QuerySnapshot,
 } from "firebase/firestore";
 import { React, useState, useEffect } from "react";
 import styled from "styled-components";
@@ -13,7 +15,7 @@ import { auth, db } from "../../firebase";
 
 function Chatting() {
     const user1 = auth.currentUser.uid;
-    const user2 = auth.currentUser.email;
+    const usercurrent = auth.currentUser;
     const [users, setUser] = useState([]);
 
     useEffect(() => {
@@ -46,19 +48,35 @@ function Chatting() {
         setSearch(searched);
     };
     const [count, setCount] = useState(0);
-    const [chat, setChat] = useState();
+    const [chat, setChat] = useState([]);
     const selectUser = (user) => {
         setChat(user);
-        console.log(chat);
-        console.log("hai");
+        const id =
+            chat > usercurrent
+                ? `${chat + usercurrent}`
+                : `${usercurrent + chat}`;
+        const msgsRef = collection(db, "messages", id, "chat");
+
+        onSnapshot(msgsRef, (querySnapshot) => {
+            let msgs = [];
+            querySnapshot.forEach((docu) => {
+                msgs.push(docu.data());
+            });
+            setMessage(msgs);
+        });
     };
+    const [message, setMessage] = useState([]);
+    console.log(message);
     return (
         <TopDiv>
             <MainSection>
                 <LeftDiv>
                     <Wrap className="wrapper">
                         <HeadlineTop>
-                            Welcome - {user2} <OnlineBarTop></OnlineBarTop>
+                            Welcome -{usercurrent.email}
+                            <OnlineBarTop></OnlineBarTop>
+                            <br /> you're now chatting with{" "}
+                            <Middle>{chat.name}</Middle>
                         </HeadlineTop>
                         <Searchbar
                             type="text"
@@ -81,6 +99,7 @@ function Chatting() {
                                     user={user}
                                     onClick={() => {
                                         setCount(user.id);
+                                        selectUser(user);
                                     }}
                                 >
                                     <ProfileContainer>
@@ -113,19 +132,23 @@ function Chatting() {
                 </LeftDiv>
                 <Foot>
                     <WrapperBottom>
-                        <DivRight>
-                            <ChatType
-                                type="text"
-                                placeholder="start chatting now"
-                            />
-                            <ButtonSend>Send</ButtonSend>
-                        </DivRight>
+                        {chat ? (
+                            <DivRight>
+                                <ChatType
+                                    type="text"
+                                    placeholder="start chatting now"
+                                    onChange={(e) => setMessage(e.target.value)}
+                                />
+                                <ButtonSend>Send</ButtonSend>
+                            </DivRight>
+                        ) : null}
                     </WrapperBottom>
                 </Foot>
             </MainSection>
         </TopDiv>
     );
 }
+const Middle = styled.div``;
 const WrapperBottom = styled.div`
     margin-left: 382px;
 `;
@@ -157,7 +180,7 @@ const ButtonSend = styled.a`
     border: 1px solid black;
     border-radius: 4px;
     cursor: pointer;
-    width: 120px;
+    width: 240px;
     display: flex;
     align-items: center;
     justify-content: center;
