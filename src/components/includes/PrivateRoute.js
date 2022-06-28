@@ -5,7 +5,7 @@ import Home from "../screens/Home";
 
 const PrivateRoute = () => {
     const { user } = useContext(AuthContext);
-    console.log(user);
+    // console.log(user);
     return user ? <Home /> : <Navigate to="/" />;
 };
 

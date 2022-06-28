@@ -9,16 +9,21 @@ import { signOut } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
 
 function Navbar() {
+    const [loading, setLoading] = useState(false);
     const Logout = async () => {
         await updateDoc(doc(db, "users", auth.currentUser.uid), {
             isOnline: false,
         });
+        setLoading(true);
         signOut(auth)
             .then(() => {
                 console.log("signout success");
             })
             .catch((error) => {});
     };
+    if (loading) {
+        return <>Loading</>;
+    }
     return (
         <NavbarTop>
             <Wrap className="wrapper">
@@ -32,15 +37,9 @@ function Navbar() {
                         <DashboardLink onClick={Logout} className="Margin">
                             SignOut
                         </DashboardLink>
-                        <DashboardLink className="Margin">
+                        <DashboardLinked to="/profile">
                             Edit Profile
-                        </DashboardLink>
-                        <Button>
-                            <IoIosNotificationsOutline />
-                            <Badge>
-                                <Priced>{1}</Priced>
-                            </Badge>
-                        </Button>
+                        </DashboardLinked>
                         <Profile>
                             <CgProfile />
                         </Profile>
@@ -109,6 +108,26 @@ const Childtwo = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+`;
+const DashboardLinked = styled(Link)`
+    text-decoration: none;
+    font-size: 16px;
+    border: 2px solid #fff;
+    border-radius: 5px;
+    color: #fff;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    margin-right: 10px;
+    cursor: pointer;
+    &.Margin {
+        margin-right: 10px;
+    }
+    @media all and (max-width: 640px) {
+        width: 100px;
+    }
 `;
 const DashboardLink = styled.a`
     text-decoration: none;

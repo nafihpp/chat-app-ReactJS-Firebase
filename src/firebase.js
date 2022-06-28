@@ -1,8 +1,6 @@
-import firebase from "firebase/compat/app";
-import "firebase/compat/auth";
-import "firebase/compat/firestore";
+import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore/lite";
+import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
@@ -12,14 +10,11 @@ const firebaseConfig = {
     storageBucket: "chat-app-final-44ddd.appspot.com",
     messagingSenderId: "229046426576",
     appId: "1:229046426576:web:fb51ac235a30582fc3f7d5",
+    databaseURL: "https://chat-app-final-44ddd.firebaseio.com",
 };
 
-// Initialize Firebase
-const app = firebase.initializeApp(firebaseConfig);
-
+const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
-export { auth, db, storage };
-
-export default app;
+export { auth, storage, db };
