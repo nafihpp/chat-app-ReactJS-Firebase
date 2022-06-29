@@ -85,7 +85,7 @@ export default function Signup() {
                                     }
                                 />
                             </InputContainer>
-                            <LoginButton to="/login">Login Now</LoginButton>
+                            <LoginButton to="/">Login Now</LoginButton>
                             <ButtonContainer>
                                 <SubmitButton onClick={handleSubmit}>
                                     Create an Account
