@@ -2,7 +2,7 @@ import { React, useState } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import Helmet from "react-helmet";
-import { setDoc, doc } from "firebase/firestore";
+import { setDoc, doc, Timestamp } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
@@ -29,6 +29,7 @@ export default function Signup() {
                 email: email,
                 password: password,
                 isOnline: false,
+                AccountCreated: Timestamp.fromDate(new Date()),
             });
             navigate("/");
         } catch (err) {

@@ -5,7 +5,7 @@ import Helmet from "react-helmet";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebase";
 import { updateDoc } from "firebase/firestore/lite";
-import { doc } from "firebase/firestore";
+import { doc, Timestamp } from "firebase/firestore";
 
 export default function Login() {
     const [email, setEmail] = useState("");
@@ -18,6 +18,7 @@ export default function Login() {
             alert("successfully logined");
             await updateDoc(doc(db, "users", auth.currentUser.uid), {
                 isOnline: true,
+                LastLogin: Timestamp.fromDate(new Date()),
             });
             navigate("/home");
         } catch (err) {
@@ -26,7 +27,6 @@ export default function Login() {
             setPassword("");
         }
     };
-
     return (
         <>
             <Helmet>

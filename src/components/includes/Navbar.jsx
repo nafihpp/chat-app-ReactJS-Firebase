@@ -1,29 +1,20 @@
 import React from "react";
 import { useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { CgProfile } from "react-icons/cg";
 import { auth, db } from "../../firebase";
 import { signOut } from "firebase/auth";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, Timestamp, updateDoc } from "firebase/firestore";
 
 function Navbar() {
-    const [loading, setLoading] = useState(false);
     const Logout = async () => {
         await updateDoc(doc(db, "users", auth.currentUser.uid), {
             isOnline: false,
         });
-        setLoading(true);
-        signOut(auth)
-            .then(() => {
-                console.log("signout success");
-            })
-            .catch((error) => {});
+        signOut(auth);
     };
-    if (loading) {
-        return <>Loading</>;
-    }
     return (
         <NavbarTop>
             <Wrap className="wrapper">
@@ -37,9 +28,7 @@ function Navbar() {
                         <DashboardLink onClick={Logout} className="Margin">
                             SignOut
                         </DashboardLink>
-                        <DashboardLinked to="/profile">
-                            Edit Profile
-                        </DashboardLinked>
+                        <DashboardLinked>Edit Profile</DashboardLinked>
                         <Profile>
                             <CgProfile />
                         </Profile>
@@ -109,7 +98,7 @@ const Childtwo = styled.div`
     justify-content: center;
     align-items: center;
 `;
-const DashboardLinked = styled(Link)`
+const DashboardLinked = styled.a`
     text-decoration: none;
     font-size: 16px;
     border: 2px solid #fff;

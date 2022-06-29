@@ -8,10 +8,15 @@ import {
     updateDoc,
     orderBy,
     QuerySnapshot,
+    Timestamp,
 } from "firebase/firestore";
 import { React, useState, useEffect } from "react";
 import styled from "styled-components";
 import { auth, db } from "../../firebase";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import MessageForm from "./MessageForm";
+import MessageBox from "./MessageBox";
 
 function Chatting() {
     const user1 = auth.currentUser.uid;
@@ -30,6 +35,7 @@ function Chatting() {
         });
         return () => getUsers();
     }, []);
+
     const Logout = async () => {
         await updateDoc(doc(db, "users", auth.currentUser.uid), {
             isOnline: false,
@@ -38,10 +44,11 @@ function Chatting() {
             .then(() => {})
             .catch((error) => {});
     };
-    window.addEventListener("beforeunload", (ev) => {
-        Logout();
-        ev.preventDefault();
-    });
+
+    // window.addEventListener("beforeunload", (ev) => {
+    //     Logout();
+    //     ev.preventDefault();
+    // });
     const [search, setSearch] = useState("");
     const handleFilter = (e) => {
         let searched = e.target.value.toLowerCase();
@@ -62,20 +69,34 @@ function Chatting() {
             querySnapshot.forEach((docu) => {
                 msgs.push(docu.data());
             });
-            setMessage(msgs);
         });
     };
-    const [message, setMessage] = useState([]);
-    console.log(message);
+    let onlineuser = [];
+    const [current, setCurrent] = useState("");
+    const notify = () => {
+        const userRef = collection(db, "users");
+        const f = query(userRef, where("id", "in", [user1]));
+        onSnapshot(f, (currented) => {
+            currented.forEach((curren) => {
+                setCurrent(curren.data());
+            });
+        });
+        users.map((element) => {
+            if (element.isOnline) {
+                onlineuser.push(element);
+            }
+        });
+    };
+    notify();
     return (
-        <TopDiv>
+        <>
             <MainSection>
                 <LeftDiv>
                     <Wrap className="wrapper">
                         <HeadlineTop>
-                            Welcome -{usercurrent.email}
+                            Welcome Mr {current.name}
                             <OnlineBarTop></OnlineBarTop>
-                            <br /> you're now chatting with{" "}
+                            <br />
                             <Middle>{chat.name}</Middle>
                         </HeadlineTop>
                         <Searchbar
@@ -121,6 +142,17 @@ function Chatting() {
                                             )}
                                         </Headline>
                                     </WriteSpan>
+                                    <ToastContainer
+                                        position="top-right"
+                                        autoClose={5000}
+                                        hideProgressBar={false}
+                                        newestOnTop={false}
+                                        closeOnClick
+                                        rtl={false}
+                                        pauseOnFocusLoss
+                                        draggable
+                                        pauseOnHover
+                                    />
                                     <Spanned
                                         className={
                                             count === user.id ? "dash" : ""
@@ -130,28 +162,18 @@ function Chatting() {
                             ))}
                     </Wrap>
                 </LeftDiv>
-                <Foot>
-                    <WrapperBottom>
-                        {chat ? (
-                            <DivRight>
-                                <ChatType
-                                    type="text"
-                                    placeholder="start chatting now"
-                                    onChange={(e) => setMessage(e.target.value)}
-                                />
-                                <ButtonSend>Send</ButtonSend>
-                            </DivRight>
-                        ) : null}
-                    </WrapperBottom>
-                </Foot>
+                <MessageDiv>
+                    <MessageForm chat={chat} setChat={setChat} />
+                </MessageDiv>
             </MainSection>
-        </TopDiv>
+        </>
     );
 }
-const Middle = styled.div``;
-const WrapperBottom = styled.div`
-    margin-left: 382px;
+const MessageDiv = styled.div`
+    width: 60%;
+    position: relative;
 `;
+const Middle = styled.div``;
 const Spanned = styled.span`
     width: 5px;
     height: 43px;
@@ -161,47 +183,28 @@ const Spanned = styled.span`
         display: block;
     }
 `;
-const MiddleDiv = styled.div``;
+
 const HeadlineTop = styled.h5`
     font-size: 20px;
     margin-bottom: 10px;
 `;
-const Foot = styled.section`
-    width: 100%;
-    background: grey;
-`;
-const ChatType = styled.input`
-    border-radius: 4px;
-    padding: 5px;
-    height: 42px;
-    width: 90%;
-`;
-const ButtonSend = styled.a`
-    border: 1px solid black;
-    border-radius: 4px;
-    cursor: pointer;
-    width: 240px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #4285f4;
-`;
 const OfflineBar = styled.div`
-    width: 4%;
+    width: 3%;
     height: 10px;
     background: red;
     display: inline-block;
     border-radius: 6px;
 `;
 const OnlineBarTop = styled.div`
-    width: 3%;
-    height: 10px;
+    width: 2%;
+    height: 8px;
     background: green;
     display: inline-block;
     border-radius: 8px;
+    margin-left: 4px;
 `;
 const OnlineBar = styled.div`
-    width: 4%;
+    width: 3%;
     height: 10px;
     background: green;
     display: inline-block;
@@ -238,18 +241,15 @@ const Searchbar = styled.input`
     width: 100%;
 `;
 const LeftDiv = styled.div`
-    height: calc(100vh - 115px);
+    width: 30%;
     background: #4285f4;
-    width: 25%;
     padding-top: 22px;
+    height: calc(100vh - 100px);
 `;
-const DivRight = styled.div`
+const MainSection = styled.section`
+    padding-top: 70px;
     display: flex;
 `;
-const MainSection = styled.section``;
 const Wrap = styled.div``;
-const TopDiv = styled.div`
-    padding-top: 70px;
-`;
 
 export default Chatting;
