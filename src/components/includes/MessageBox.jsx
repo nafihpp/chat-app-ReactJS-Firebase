@@ -1,5 +1,5 @@
 import React from "react";
-
+import styled from "styled-components";
 function MessageBox({ chat, setChat }) {
     return chat.name ? (
         <MainDiv>
