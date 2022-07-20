@@ -129,12 +129,10 @@ function Chatting() {
                                             {user.name}
                                             {user.isOnline ? (
                                                 <>
-                                                    <p>Online</p>
                                                     <OnlineBar></OnlineBar>
                                                 </>
                                             ) : (
                                                 <>
-                                                    <p>Offline</p>
                                                     <OfflineBar></OfflineBar>
                                                 </>
                                             )}
@@ -170,15 +168,20 @@ function Chatting() {
 const MessageDiv = styled.div`
     width: 60%;
     position: relative;
+    @media all and (max-width: 640px) {
+        display: none;
+    }
 `;
-const Middle = styled.div``;
 const Spanned = styled.span`
     width: 5px;
     height: 43px;
     background-color: #000;
     display: none;
     &.dash {
+        margin-left: 5px;
         display: block;
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
     }
 `;
 
