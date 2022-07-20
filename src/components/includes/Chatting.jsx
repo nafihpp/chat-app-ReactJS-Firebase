@@ -45,7 +45,7 @@ function Chatting() {
             .catch((error) => {});
     };
 
-    // window.addEventListener("beforeunload", (ev) => {
+    //window.addEventListener("beforeunload", (ev) => {
     //     Logout();
     //     ev.preventDefault();
     // });
@@ -96,8 +96,6 @@ function Chatting() {
                         <HeadlineTop>
                             Welcome Mr {current.name}
                             <OnlineBarTop></OnlineBarTop>
-                            <br />
-                            <Middle>{chat.name}</Middle>
                         </HeadlineTop>
                         <Searchbar
                             type="text"
@@ -245,6 +243,9 @@ const LeftDiv = styled.div`
     background: #4285f4;
     padding-top: 22px;
     height: calc(100vh - 100px);
+    @media all and (max-width: 640px) {
+        width: 100%;
+    }
 `;
 const MainSection = styled.section`
     padding-top: 70px;

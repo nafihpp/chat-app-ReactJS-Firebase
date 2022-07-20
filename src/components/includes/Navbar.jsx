@@ -40,31 +40,6 @@ function Navbar() {
 }
 const Profile = styled.span``;
 const Wrap = styled.div``;
-const Priced = styled.span`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`;
-const Button = styled.a`
-    color: white;
-    cursor: pointer;
-    position: relative;
-    :hover {
-        color: white;
-    }
-`;
-const Badge = styled.div`
-    background: green;
-    border-radius: 84px;
-    position: absolute;
-    top: 10px;
-    left: 11px;
-    width: 130%;
-    height: 21px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`;
 const NavbarTop = styled.section`
     width: 100%;
     height: 70px;

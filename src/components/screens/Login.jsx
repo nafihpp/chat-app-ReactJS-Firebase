@@ -6,11 +6,14 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebase";
 import { updateDoc } from "firebase/firestore/lite";
 import { doc, Timestamp } from "firebase/firestore";
+import LoadingBar from "react-top-loading-bar";
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [progress, setProgress] = useState(0);
     const navigate = useNavigate();
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -32,6 +35,11 @@ export default function Login() {
             <Helmet>
                 <title>Login Now</title>
             </Helmet>
+            <LoadingBar
+                color="#f11946"
+                progress={progress}
+                onLoaderFinished={() => setProgress(0)}
+            />
             <MainContainer>
                 <Wrapper>
                     <Container>

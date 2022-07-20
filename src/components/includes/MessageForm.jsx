@@ -1,8 +1,18 @@
+import { doc, setDoc } from "firebase/firestore";
 import { React, useState } from "react";
 import styled from "styled-components";
+import { db } from "../../firebase";
 import MessageBox from "./MessageBox";
 function MessageForm({ chat, setChat }) {
     const [message, setMessage] = useState([]);
+    console.log(message);
+    const Sending = async (e) => {
+        e.preventDefault();
+        await setDoc(doc(db, "messages"), {
+            message: message,
+        });
+        setMessage("");
+    };
     return (
         <>
             <MessageBox chat={chat} setChat={setChat} />
@@ -15,7 +25,7 @@ function MessageForm({ chat, setChat }) {
                                 placeholder="start chatting now"
                                 onChange={(e) => setMessage(e.target.value)}
                             />
-                            <ButtonSend>Send</ButtonSend>
+                            <ButtonSend onClick={Sending}>Send</ButtonSend>
                         </DivRight>
                     </WrapperBottom>
                 </Foot>
@@ -48,6 +58,7 @@ const ButtonSend = styled.a`
 const Foot = styled.section`
     position: absolute;
     bottom: 0;
+    width: 100%;
 `;
 
 export default MessageForm;
