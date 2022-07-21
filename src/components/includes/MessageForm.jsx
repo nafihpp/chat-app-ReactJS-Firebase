@@ -5,7 +5,6 @@ import { db } from "../../firebase";
 import MessageBox from "./MessageBox";
 function MessageForm({ chat, setChat }) {
     const [message, setMessage] = useState([]);
-    console.log(message);
     const Sending = async (e) => {
         e.preventDefault();
         await setDoc(doc(db, "messages"), {

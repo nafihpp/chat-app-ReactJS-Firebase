@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import Helmet from "react-helmet";
@@ -6,9 +6,8 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebase";
 import { updateDoc } from "firebase/firestore/lite";
 import { doc, Timestamp } from "firebase/firestore";
-import LoadingBar from "react-top-loading-bar";
 
-export default function Login() {
+export default function Login({ setModal }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [progress, setProgress] = useState(0);
@@ -30,25 +29,31 @@ export default function Login() {
             setPassword("");
         }
     };
+    function useOutsideClick(ref) {
+        useEffect(() => {
+            function handleClickOutside(event) {
+                if (ref.current && !ref.current.contains(event.target)) {
+                    setModal(false);
+                }
+            }
+            document.addEventListener("mousedown", handleClickOutside);
+            return () => {
+                document.removeEventListener("mousedown", handleClickOutside);
+            };
+        }, [ref]);
+    }
+
+    const wrapperRef = useRef(null);
+    useOutsideClick(wrapperRef);
     return (
         <>
             <Helmet>
                 <title>Login Now</title>
             </Helmet>
-            <LoadingBar
-                color="#f11946"
-                progress={progress}
-                onLoaderFinished={() => setProgress(0)}
-            />
             <MainContainer>
                 <Wrapper>
                     <Container>
-                        <LeftContainer>
-                            <MainHeading>
-                                Welcome to the Chat-app Login Now!
-                            </MainHeading>
-                        </LeftContainer>
-                        <RightContainer>
+                        <RightContainer ref={wrapperRef}>
                             <LoginContainer>
                                 <LoginHeading>
                                     Login to your Account
@@ -77,9 +82,18 @@ export default function Login() {
                                             }
                                         />
                                     </InputContainer>
-                                    <LoginButton to="register">
-                                        Signup Now
-                                    </LoginButton>
+                                    <MainButtonContainer>
+                                        <SignupButton
+                                            onClick={() => {
+                                                setModal(false);
+                                            }}
+                                        >
+                                            Create Account?
+                                        </SignupButton>
+                                        <ForgotButton>
+                                            Forgot Password?
+                                        </ForgotButton>
+                                    </MainButtonContainer>
                                     <ButtonContainer>
                                         <SubmitButton onClick={handleSubmit}>
                                             Login
@@ -94,43 +108,85 @@ export default function Login() {
         </>
     );
 }
+
+//   .card:hover {
+//     color: rgb(88 199 250 / 100%);
+//     transition: color 1s;
+//   }
+//   .card:hover:before, .card:hover:after {
+//     animation: none;
+//     opacity: 0;
+//   }
+
+//   .card::before {
+//     content: "";
+//     width: 104%;
+//     height: 102%;
+//     border-radius: 8px;
+//     background-image: linear-gradient(
+//       var(--rotate)
+//       , #5ddcff, #3c67e3 43%, #4e00c2);
+//       position: absolute;
+//       z-index: -1;
+//       top: -1%;
+//       left: -2%;
+//       animation: spin 2.5s linear infinite;
+//   }
+
+//   .card::after {
+//     position: absolute;
+//     content: "";
+//     top: calc(var(--card-height) / 6);
+//     left: 0;
+//     right: 0;
+//     z-index: -1;
+//     height: 100%;
+//     width: 100%;
+//     margin: 0 auto;
+//     transform: scale(0.8);
+//     filter: blur(calc(var(--card-height) / 6));
+//     background-image: linear-gradient(
+//       var(--rotate)
+//       , #5ddcff, #3c67e3 43%, #4e00c2);
+//       opacity: 1;
+//     transition: opacity .5s;
+//     animation: spin 2.5s linear infinite;
+//   }
+const MainButtonContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+`;
+const SignupButton = styled.a`
+    font-size: 14px;
+    font-weight: 550;
+    cursor: pointer;
+`;
 const MainContainer = styled.section`
-    background: #000;
-    height: 100vh;
+    position: absolute;
+    top: 15%;
+    width: 100%;
+    backdrop-filter: blur(2px);
+    z-index: 100;
 `;
 const Wrapper = styled.div`
     width: 90%;
     margin: 0 auto;
 `;
-const Container = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    padding: 15px;
-`;
-const LeftContainer = styled.div`
-    display: flex;
-    align-items: center;
-    @media all and (max-width: 640px) {
-        display: none;
-    }
-`;
-const MainHeading = styled.h1`
-    font-size: 28px;
-    color: #fff;
-    line-height: 1.4em;
-`;
+const Container = styled.div``;
 const RightContainer = styled.div`
-    color: #fff;
-    padding-top: 80px;
-    width: 35%;
-    @media all and (max-width: 640px) {
-        width: 100%;
+    border-radius: 20px;
+    padding: 30px;
+    color: #000;
+    width: 31%;
+    height: 420px;
+    margin: 0 auto;
+    background: #fff;
+    @media all and (max-width: 1080px) {
+        width: 80%;
         padding: 0 55px 55px;
     }
 `;
 const LoginContainer = styled.div`
-    padding-bottom: 70px;
     border-bottom: 1px solid #fff;
     width: 100%;
 `;
@@ -165,13 +221,13 @@ const TextInput = styled.input`
         width: 100%;
     }
 `;
-const LoginButton = styled(Link)`
-    display: flex;
-    justify-content: flex-end;
+const ForgotButton = styled.a`
     margin-bottom: 25px;
-    color: #fff;
-    font-size: 20px;
+    font-size: 15px;
     text-decoration: none;
+    color: red;
+    cursor: pointer;
+    font-weight: 550;
 `;
 const SubmitButton = styled.a`
     background: #000;

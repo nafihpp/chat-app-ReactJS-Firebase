@@ -5,8 +5,10 @@ import Helmet from "react-helmet";
 import { setDoc, doc, Timestamp } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import Login from "./Login";
 
 export default function Signup() {
+    const [modal, setModal] = useState(false);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -31,7 +33,7 @@ export default function Signup() {
                 isOnline: false,
                 AccountCreated: Timestamp.fromDate(new Date()),
             });
-            navigate("/");
+            setModal(!modal);
         } catch (err) {
             alert(err.message);
             setEmail("");
@@ -39,21 +41,14 @@ export default function Signup() {
             setName("");
         }
     };
-
     return (
         <>
             <Helmet>
                 <title>Register Now</title>
             </Helmet>
             <Container>
-                <LeftContainer>
-                    <MainHeading>
-                        Welcome to the Chatapp Signup Now!
-                    </MainHeading>
-                </LeftContainer>
                 <RightContainer>
                     <LoginContainer>
-                        <LoginHeading>Register into Account</LoginHeading>
                         <LoginInfo>Start Chatting after Signup</LoginInfo>
                         <Form>
                             <InputContainer>
@@ -86,7 +81,13 @@ export default function Signup() {
                                     }
                                 />
                             </InputContainer>
-                            <LoginButton to="/">Login Now</LoginButton>
+                            <LoginButton
+                                onClick={() => {
+                                    setModal(!modal);
+                                }}
+                            >
+                                Login Now
+                            </LoginButton>
                             <ButtonContainer>
                                 <SubmitButton onClick={handleSubmit}>
                                     Create an Account
@@ -96,6 +97,7 @@ export default function Signup() {
                     </LoginContainer>
                 </RightContainer>
             </Container>
+            {modal && <Login setModal={setModal} />}
         </>
     );
 }
@@ -107,13 +109,9 @@ const Container = styled.div`
     justify-content: space-between;
     padding: 15px;
     height: 100vh;
-`;
-const LeftContainer = styled.div`
-    display: flex;
+    position: relative;
+    width: 100%;
     align-items: center;
-    @media all and (max-width: 680px) {
-        display: none;
-    }
 `;
 const MainHeading = styled.h1`
     font-size: 36px;
@@ -126,6 +124,7 @@ const RightContainer = styled.div`
     align-items: flex-start;
     justify-content: center;
     padding: 0 70px 70px;
+    margin: 0 auto;
     @media all and (max-width: 640px) {
         width: 100%;
         padding: 0 55px 55px;
@@ -137,14 +136,10 @@ const LoginContainer = styled.div`
     width: 100%;
     color: #fff;
 `;
-const LoginHeading = styled.h3`
+const LoginInfo = styled.p`
     font-size: 32px;
     font-weight: bold;
     margin-bottom: 20px;
-`;
-const LoginInfo = styled.p`
-    font-size: 18px;
-    margin-bottom: 35px;
 `;
 const Form = styled.form`
     width: 100%;
@@ -169,7 +164,7 @@ const TextInput = styled.input`
         width: 95%;
     }
 `;
-const LoginButton = styled(Link)`
+const LoginButton = styled.a`
     display: flex;
     justify-content: end;
     margin-bottom: 25px;

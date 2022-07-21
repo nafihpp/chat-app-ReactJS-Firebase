@@ -6,9 +6,11 @@ function MessageBox({ chat, setChat }) {
             <Headline>You're Chatting with {chat.name}</Headline>
         </MainDiv>
     ) : (
-        <h1>Select a user to Start Chatting</h1>
+        <MainDiv>
+            <Headline>Select a User to start Chatting</Headline>
+        </MainDiv>
     );
 }
-const Headline = styled.div``;
+const Headline = styled.p``;
 const MainDiv = styled.div``;
 export default MessageBox;

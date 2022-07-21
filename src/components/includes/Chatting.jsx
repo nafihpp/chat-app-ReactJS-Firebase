@@ -44,11 +44,6 @@ function Chatting() {
             .then(() => {})
             .catch((error) => {});
     };
-
-    //window.addEventListener("beforeunload", (ev) => {
-    //     Logout();
-    //     ev.preventDefault();
-    // });
     const [search, setSearch] = useState("");
     const handleFilter = (e) => {
         let searched = e.target.value.toLowerCase();
@@ -242,7 +237,7 @@ const Searchbar = styled.input`
     width: 100%;
 `;
 const LeftDiv = styled.div`
-    width: 30%;
+    width: 23%;
     background: #4285f4;
     padding-top: 22px;
     height: calc(100vh - 100px);
