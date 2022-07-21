@@ -151,10 +151,16 @@ const LoginHeading = styled.h3`
     font-size: 27px;
     font-weight: bold;
     margin-bottom: 20px;
+    @media all and (max-width: 640px) {
+        font-size: 22px;
+    }
 `;
 const LoginInfo = styled.p`
     font-size: 18px;
     margin-bottom: 35px;
+    @media all and (max-width: 640px) {
+        font-size: 14px;
+    }
 `;
 const Form = styled.form`
     width: 100%;
@@ -199,6 +205,7 @@ const SubmitButton = styled.a`
     border: 1px solid;
     @media all and (max-width: 640px) {
         padding: 6px 24px;
+        font-size: 13px;
     }
 `;
 const ButtonContainer = styled.div`
