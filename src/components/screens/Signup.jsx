@@ -6,6 +6,7 @@ import { setDoc, doc, Timestamp } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import Login from "./Login";
+import SuccessModal from "../includes/SuccessModal";
 
 export default function Signup() {
     const [modal, setModal] = useState(false);
@@ -13,7 +14,7 @@ export default function Signup() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
-    const navigate = useNavigate();
+    const [successModal, setSuccess] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -24,7 +25,8 @@ export default function Signup() {
                 email,
                 password
             );
-            alert("Account Created Successfully");
+            setSuccess(!successModal);
+            setModal(!modal);
             await setDoc(doc(db, "users", result.user.uid), {
                 id: result.user.uid,
                 name: name,
@@ -33,9 +35,8 @@ export default function Signup() {
                 isOnline: false,
                 AccountCreated: Timestamp.fromDate(new Date()),
             });
-            setModal(!modal);
         } catch (err) {
-            alert(err.message);
+            console.log(err);
             setEmail("");
             setPassword("");
             setName("");
@@ -97,49 +98,59 @@ export default function Signup() {
                     </LoginContainer>
                 </RightContainer>
             </Container>
-            {modal && <Login setModal={setModal} />}
+
+            {modal && <Login />}
         </>
     );
 }
-
 const Container = styled.div`
     display: flex;
     flex-wrap: wrap;
-    background: #000;
+    background: #fff;
     justify-content: space-between;
     padding: 15px;
     height: 100vh;
-    position: relative;
     width: 100%;
     align-items: center;
-`;
-const MainHeading = styled.h1`
-    font-size: 36px;
-    color: #fff;
-    line-height: 1.4em;
+    background-color: bisque;
 `;
 const RightContainer = styled.div`
-    width: 45%;
+    width: 38%;
     display: flex;
     align-items: flex-start;
     justify-content: center;
     padding: 0 70px 70px;
     margin: 0 auto;
-    @media all and (max-width: 640px) {
+    @media all and (max-width: 980px) {
         width: 100%;
-        padding: 0 55px 55px;
+    }
+    @media all and (max-width: 780px) {
+        width: 100%;
+        padding: 0 50px 50px;
     }
 `;
 const LoginContainer = styled.div`
-    padding-bottom: 70px;
-    border-bottom: 1px solid #fff;
+    border-bottom: 10px solid yellowgreen;
     width: 100%;
+    height: 514px;
     color: #fff;
+    background: black;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 20px;
 `;
 const LoginInfo = styled.p`
-    font-size: 32px;
+    font-size: 27px;
     font-weight: bold;
     margin-bottom: 20px;
+    @media all and (max-width: 640px) {
+        font-size: 25px;
+    }
+    @media all and (max-width: 480) {
+        font-size: 19px;
+    }
 `;
 const Form = styled.form`
     width: 100%;
@@ -153,8 +164,8 @@ const InputContainer = styled.div`
     position: relative;
 `;
 const TextInput = styled.input`
-    padding: 20px 25px 20px 30px;
-    width: 70%;
+    padding: 15px 25px 15px 30px;
+    width: 95%;
     display: block;
     border: none;
     border-radius: 10px;
@@ -171,17 +182,21 @@ const LoginButton = styled.a`
     color: #fff;
     font-size: 20px;
     text-decoration: none;
+    cursor: pointer;
 `;
 const SubmitButton = styled.button`
     background: #000;
     border: 0;
     outline: 0;
     color: #fff;
-    padding: 25px 40px;
+    padding: 15px 20px;
     border-radius: 8px;
     font-size: 20px;
     border: 1px solid #fff;
     cursor: pointer;
+    @media all and (max-width: 640px) {
+        padding: 14px 13px;
+    }
 `;
 const ButtonContainer = styled.div`
     display: flex;

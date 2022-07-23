@@ -6,9 +6,6 @@ import {
     where,
     doc,
     updateDoc,
-    orderBy,
-    QuerySnapshot,
-    Timestamp,
 } from "firebase/firestore";
 import { React, useState, useEffect } from "react";
 import styled from "styled-components";
@@ -17,6 +14,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MessageForm from "./MessageForm";
 import MessageBox from "./MessageBox";
+import Dummy from "../../assets/dummy.jpg";
 
 function Chatting() {
     const user1 = auth.currentUser.uid;
@@ -89,7 +87,7 @@ function Chatting() {
                 <LeftDiv>
                     <Wrap className="wrapper">
                         <HeadlineTop>
-                            Welcome Mr {current.name}
+                            Welcome Mr.{current.name}
                             <OnlineBarTop></OnlineBarTop>
                         </HeadlineTop>
                         <Searchbar
@@ -117,7 +115,7 @@ function Chatting() {
                                     }}
                                 >
                                     <ProfileContainer>
-                                        <img src={user.url} alt="profile" />
+                                        <img src={Dummy} alt="profile" />
                                     </ProfileContainer>
                                     <WriteSpan>
                                         <Headline>
@@ -185,14 +183,14 @@ const HeadlineTop = styled.h5`
     margin-bottom: 10px;
 `;
 const OfflineBar = styled.div`
-    width: 3%;
+    width: 4%;
     height: 10px;
     background: red;
     display: inline-block;
     border-radius: 6px;
 `;
 const OnlineBarTop = styled.div`
-    width: 2%;
+    width: 3%;
     height: 8px;
     background: green;
     display: inline-block;
@@ -200,7 +198,7 @@ const OnlineBarTop = styled.div`
     margin-left: 4px;
 `;
 const OnlineBar = styled.div`
-    width: 3%;
+    width: 4%;
     height: 10px;
     background: green;
     display: inline-block;
@@ -225,8 +223,11 @@ const ContactsDiv = styled.a`
     }
 `;
 const ProfileContainer = styled.div`
-    width: 16%;
-    margin-right: 25px;
+    width: 23%;
+    margin-right: 26px;
+    border-radius: 19%;
+    overflow: hidden;
+    max-height: 50px;
 `;
 const WriteSpan = styled.span`
     width: 90%;
@@ -241,6 +242,7 @@ const LeftDiv = styled.div`
     background: #4285f4;
     padding-top: 22px;
     height: calc(100vh - 100px);
+    overflow-y: auto;
     @media all and (max-width: 640px) {
         width: 100%;
     }

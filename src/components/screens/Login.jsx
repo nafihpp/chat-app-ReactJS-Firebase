@@ -6,25 +6,25 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebase";
 import { updateDoc } from "firebase/firestore/lite";
 import { doc, Timestamp } from "firebase/firestore";
+import SuccessModal from "../includes/SuccessModal";
 
 export default function Login({ setModal }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [progress, setProgress] = useState(0);
+    const [error, setError] = useState("");
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             await signInWithEmailAndPassword(auth, email, password);
-            alert("successfully logined");
             await updateDoc(doc(db, "users", auth.currentUser.uid), {
                 isOnline: true,
                 LastLogin: Timestamp.fromDate(new Date()),
             });
             navigate("/home");
         } catch (err) {
-            alert(err.message);
+            setError(err);
             setEmail("");
             setPassword("");
         }
@@ -42,9 +42,12 @@ export default function Login({ setModal }) {
             };
         }, [ref]);
     }
-
     const wrapperRef = useRef(null);
     useOutsideClick(wrapperRef);
+    const emailRef = useRef(null);
+    useEffect(() => {
+        emailRef.current.focus();
+    }, []);
     return (
         <>
             <Helmet>
@@ -64,6 +67,7 @@ export default function Login({ setModal }) {
                                 <Form>
                                     <InputContainer>
                                         <TextInput
+                                            ref={emailRef}
                                             type="email"
                                             placeholder="Email"
                                             onChange={(e) =>
@@ -105,6 +109,7 @@ export default function Login({ setModal }) {
                     </Container>
                 </Wrapper>
             </MainContainer>
+            {error && <SuccessModal />}
         </>
     );
 }
@@ -119,11 +124,14 @@ const SignupButton = styled.a`
     cursor: pointer;
 `;
 const MainContainer = styled.section`
-    position: absolute;
-    top: 15%;
     width: 100%;
+    height: 100vh;
     backdrop-filter: blur(2px);
     z-index: 100;
+    position: absolute;
+    top: 0;
+    display: flex;
+    align-items: center;
 `;
 const Wrapper = styled.div`
     width: 90%;
@@ -134,7 +142,7 @@ const RightContainer = styled.div`
     border-radius: 20px;
     padding: 30px;
     color: #000;
-    width: 31%;
+    width: 27%;
     height: 420px;
     margin: 0 auto;
     background: #fff;
@@ -168,7 +176,6 @@ const Form = styled.form`
 `;
 const InputContainer = styled.div`
     margin-bottom: 15px;
-    position: relative;
     &:before {
     }
 `;
@@ -179,6 +186,7 @@ const TextInput = styled.input`
     border: none;
     border-radius: 10px;
     font-size: 18px;
+    border: 1px solid black;
     outline: none;
     @media all and (max-width: 640px) {
         width: 100%;

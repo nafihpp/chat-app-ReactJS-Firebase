@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { CgProfile } from "react-icons/cg";
 import { auth, db } from "../../firebase";
-import { signOut } from "firebase/auth";
+import { reload, signOut } from "firebase/auth";
 import { doc, Timestamp, updateDoc } from "firebase/firestore";
 
 function Navbar() {
@@ -15,6 +15,12 @@ function Navbar() {
         });
         signOut(auth);
     };
+    useEffect(() => {
+        window.addEventListener("beforeunload", (ev) => {
+            ev.preventDefault();
+            Logout();
+        });
+    }, [window]);
     return (
         <NavbarTop>
             <Wrap className="wrapper">

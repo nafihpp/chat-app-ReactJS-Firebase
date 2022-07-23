@@ -1,16 +1,43 @@
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, Timestamp, updateDoc } from "firebase/firestore";
 import { React, useState } from "react";
 import styled from "styled-components";
-import { db } from "../../firebase";
+import { auth, db } from "../../firebase";
 import MessageBox from "./MessageBox";
 function MessageForm({ chat, setChat }) {
     const [message, setMessage] = useState([]);
     const Sending = async (e) => {
+        console.log(message);
         e.preventDefault();
-        await setDoc(doc(db, "messages"), {
-            message: message,
-        });
-        setMessage("");
+        const user1 = auth.currentUser.uid;
+        const user2 = chat.uid;
+        const id = user1 > user2 ? `${user1 + user2}` : `${user2 + user1}`;
+        const createdAt = Timestamp.fromDate(new Date());
+        const id2 = user1 + createdAt;
+
+        if (message) {
+            await setDoc(doc(db, `messages/${id}`, "chat", id2), {
+                message,
+                from: user1,
+                to: user2,
+                createdAt,
+                loading: true,
+            });
+            setMessage("");
+            const snapDoc = await getDoc(
+                doc(db, `messages/${id}`, "chat", id2)
+            );
+            if (snapDoc) {
+                await updateDoc(doc(db, `messages/${id}`, "chat", id2), {
+                    loading: false,
+                });
+            }
+            await setDoc(doc(db, "lastMsg", id), {
+                message,
+                from: user1,
+                to: user2,
+                createdAt,
+            });
+        }
     };
     return (
         <>
