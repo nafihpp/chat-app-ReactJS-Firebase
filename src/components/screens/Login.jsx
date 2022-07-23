@@ -149,6 +149,14 @@ const RightContainer = styled.div`
         width: 80%;
         padding: 0 55px 55px;
     }
+    @media all and (max-width: 780px) {
+        width: 90%;
+        padding: 0 19px 38px;
+    }
+    @media all and (max-width: 360px) {
+        width: 96%;
+        padding: 0 12px 22px;
+    }
 `;
 const LoginContainer = styled.div`
     border-bottom: 1px solid #fff;
