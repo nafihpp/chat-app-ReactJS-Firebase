@@ -98,7 +98,6 @@ export default function Signup() {
                     </LoginContainer>
                 </RightContainer>
             </Container>
-
             {modal && <Login />}
         </>
     );
@@ -126,7 +125,11 @@ const RightContainer = styled.div`
     }
     @media all and (max-width: 780px) {
         width: 100%;
-        padding: 0 50px 50px;
+        padding: 0px 9px 8px;
+    }
+    @media all and (max-width: 368px) {
+        width: 100%;
+        padding: 0px 0px 0px;
     }
 `;
 const LoginContainer = styled.div`
@@ -150,6 +153,9 @@ const LoginInfo = styled.p`
     }
     @media all and (max-width: 480) {
         font-size: 19px;
+    }
+    @media all and (max-width: 360) {
+        font-size: 21px;
     }
 `;
 const Form = styled.form`
