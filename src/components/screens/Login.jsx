@@ -109,7 +109,6 @@ export default function Login({ setModal }) {
                     </Container>
                 </Wrapper>
             </MainContainer>
-            {error && <SuccessModal />}
         </>
     );
 }
