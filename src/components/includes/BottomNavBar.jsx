@@ -10,14 +10,18 @@ import {
 import { BiSearchAlt } from "react-icons/bi";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { RiUser5Line } from "react-icons/ri";
-import { BsChatRightDots } from "react-icons/bs";
+import { BiMessageRounded } from "react-icons/bi";
 import { BsChatRightDotsFill } from "react-icons/bs";
+import { FaRegGrinStars } from "react-icons/fa";
+import { FaGrinStars } from "react-icons/fa";
+import { CgProfile } from "react-icons/cg";
+
 import Login from "../screens/Login";
 
 const BottomNavBar = () => {
     const navigate = useNavigate();
     const [isModal, setModal] = useState(false);
-    const [activeTabs, setActiveTabs] = useState();
+    const [activeTabs, setActiveTabs] = useState("account");
     useEffect(() => {
         switch (activeTabs) {
             case "home":
@@ -30,20 +34,31 @@ const BottomNavBar = () => {
                 setModal(true);
                 break;
             case "account":
-                navigate("/account");
+                navigate("/");
                 break;
             default:
                 navigate("/");
                 break;
         }
     }, [activeTabs, navigate]);
-    function done() {
-        setModal(true);
-        console.log("hai");
-    }
 
     return (
         <Main className="bottom-nav">
+            <Botton className="bn-tab">
+                {activeTabs === "home" ? (
+                    <FaGrinStars
+                        size="35"
+                        color="#000"
+                        onClick={() => setActiveTabs("home")}
+                    />
+                ) : (
+                    <FaRegGrinStars
+                        size="35"
+                        color="#000"
+                        onClick={() => setActiveTabs("home")}
+                    />
+                )}
+            </Botton>
             <Botton className="bn-tab">
                 {activeTabs === "home" ? (
                     <RiHomeSmile2Fill
@@ -67,37 +82,23 @@ const BottomNavBar = () => {
                         onClick={() => setActiveTabs("search")}
                     />
                 ) : (
-                    <BsChatRightDots
+                    <BiMessageRounded
                         size="35"
                         color="#000"
                         onClick={() => setActiveTabs("search")}
                     />
                 )}
             </Botton>
-            <Botton className="bn-tab">
-                {activeTabs === "favourites" ? (
-                    <AiFillHeart
-                        size="35"
-                        color="#000"
-                        onClick={() => setActiveTabs("favourites")}
-                    />
-                ) : (
-                    <AiOutlineHeart
-                        size="35"
-                        color="#000"
-                        onClick={() => setActiveTabs("favourites")}
-                    />
-                )}
-            </Botton>
+
             <Botton className="bn-tab">
                 {activeTabs === "account" ? (
-                    <RiUser5Fill
+                    <CgProfile
                         size="35"
                         color="#000"
                         onClick={() => setActiveTabs("account")}
                     />
                 ) : (
-                    <RiUser5Line
+                    <CgProfile
                         size="35"
                         color="#000"
                         onClick={() => setActiveTabs("account")}
@@ -118,17 +119,18 @@ const Main = styled.div`
         bottom: 0;
         border-top: 1px solid rgb(230, 230, 230);
         background-color: white;
-        border-top-left-radius: 36px;
-        border-top-right-radius: 36px;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
     }
 `;
-const Botton = styled.div`
+const Botton = styled.a`
     &.bn-tab {
         width: 25%;
         height: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
+        cursor: pointer;
     }
 `;
 export default BottomNavBar;
