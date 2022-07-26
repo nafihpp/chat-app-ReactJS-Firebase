@@ -7,47 +7,28 @@ import { auth, db } from "../../firebase";
 import { updateDoc } from "firebase/firestore/lite";
 import { doc, Timestamp } from "firebase/firestore";
 
-export default function SuccessModal({ SuccessModal, setSuccess, error }) {
+export default function SuccessModal({ setSuccess, error }) {
     return (
         <>
             <MainContainer>
                 <Wrapper>
                     <Container>
                         <RightContainer>
-                            {SuccessModal && (
-                                <LoginContainer>
-                                    <LoginHeading>
-                                        Successful tick!
-                                    </LoginHeading>
-                                    <LoginInfo>
-                                        you're account has been created
-                                    </LoginInfo>
-                                    <ButtonContainer>
-                                        <SubmitButton
-                                            onClick={() => {
-                                                setSuccess(false);
-                                            }}
-                                        >
-                                            Let's Go
-                                        </SubmitButton>
-                                    </ButtonContainer>
-                                </LoginContainer>
-                            )}
-                            {error && (
-                                <LoginContainer>
-                                    <LoginHeading>Unsuccessful!</LoginHeading>
-                                    <LoginInfo>oop's </LoginInfo>
-                                    <ButtonContainer>
-                                        <SubmitButton
-                                            onClick={() => {
-                                                setSuccess(false);
-                                            }}
-                                        >
-                                            Let's Go
-                                        </SubmitButton>
-                                    </ButtonContainer>
-                                </LoginContainer>
-                            )}
+                            <LoginContainer>
+                                <LoginHeading>{error}!</LoginHeading>
+                                <LoginInfo>
+                                    you're not account has been created
+                                </LoginInfo>
+                                <ButtonContainer>
+                                    <SubmitButton
+                                        onClick={() => {
+                                            setSuccess(false);
+                                        }}
+                                    >
+                                        Let's Go
+                                    </SubmitButton>
+                                </ButtonContainer>
+                            </LoginContainer>
                         </RightContainer>
                     </Container>
                 </Wrapper>
@@ -58,6 +39,7 @@ export default function SuccessModal({ SuccessModal, setSuccess, error }) {
 const MainContainer = styled.section`
     width: 100%;
     height: 100vh;
+    background-color: red;
     background: blur(2px);
     z-index: 100;
     position: absolute;
@@ -84,10 +66,9 @@ const RightContainer = styled.div`
     }
 `;
 const LoginContainer = styled.div`
-    border-bottom: 1px solid #fff;
     width: 100%;
 `;
-const LoginHeading = styled.h3`
+const LoginHeading = styled.p`
     font-size: 27px;
     font-weight: bold;
     margin-bottom: 20px;

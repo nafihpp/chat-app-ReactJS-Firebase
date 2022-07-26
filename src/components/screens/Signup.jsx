@@ -8,13 +8,14 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import Login from "./Login";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import SuccessModal from "../includes/SuccessModal";
 
 export default function Signup() {
     const [modal, setModal] = useState(false);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState([]);
+    const [error, setError] = useState("");
     const [successModal, setSuccess] = useState(false);
 
     const handleSubmit = async (e) => {
@@ -99,6 +100,7 @@ export default function Signup() {
                 </RightContainer>
             </Container>
             {modal && <Login setModal={setModal} />}
+            {error && <SuccessModal error={error} />}
         </>
     );
 }
@@ -123,11 +125,11 @@ const RightContainer = styled.div`
         width: 100%;
     }
     @media all and (max-width: 780px) {
-        width: 100%;
+        width: 95%;
         padding: 0px 9px 8px;
     }
     @media all and (max-width: 368px) {
-        width: 100%;
+        width: 93%;
         padding: 0px 0px 0px;
     }
 `;
