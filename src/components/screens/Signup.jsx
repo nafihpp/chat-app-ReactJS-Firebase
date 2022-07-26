@@ -16,13 +16,7 @@ export default function Signup() {
     const [password, setPassword] = useState("");
     const [error, setError] = useState([]);
     const [successModal, setSuccess] = useState(false);
-    const notify = () =>
-        toast.success("🦄 Wow so easy!", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-        });
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
@@ -96,7 +90,7 @@ export default function Signup() {
                                 Login Now
                             </LoginButton>
                             <ButtonContainer>
-                                <SubmitButton onClick={notify()}>
+                                <SubmitButton onClick={handleSubmit}>
                                     Create an Account
                                 </SubmitButton>
                             </ButtonContainer>
