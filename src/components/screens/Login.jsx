@@ -10,6 +10,7 @@ import SuccessModal from "../includes/SuccessModal";
 import Cross from "../../assets/Cross.svg";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import BottomNavBar from "../includes/BottomNavBar";
 
 export default function Login({ setModal }) {
     const [email, setEmail] = useState("");
@@ -28,6 +29,7 @@ export default function Login({ setModal }) {
             navigate("/home");
         } catch (err) {
             setError(err.message);
+            console.log(error);
             notify();
             setEmail("");
             setPassword("");
@@ -98,6 +100,7 @@ export default function Login({ setModal }) {
                                             }
                                         />
                                     </InputContainer>
+                                    <p>{error}</p>
                                     <MainButtonContainer>
                                         <SignupButton
                                             onClick={() => {
@@ -110,6 +113,7 @@ export default function Login({ setModal }) {
                                             Forgot Password?
                                         </ForgotButton>
                                     </MainButtonContainer>
+
                                     <ButtonContainer>
                                         <SubmitButton onClick={handleSubmit}>
                                             Login

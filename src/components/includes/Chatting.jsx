@@ -15,6 +15,7 @@ import "react-toastify/dist/ReactToastify.css";
 import MessageForm from "./MessageForm";
 import MessageBox from "./MessageBox";
 import Dummy from "../../assets/dummy.jpg";
+import BottomNavBar from "./BottomNavBar";
 
 function Chatting() {
     const user1 = auth.currentUser.uid;

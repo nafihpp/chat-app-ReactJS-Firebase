@@ -9,6 +9,7 @@ import Login from "./Login";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SuccessModal from "../includes/SuccessModal";
+import BottomNav from "../includes/BottomNavBar";
 
 export default function Signup() {
     const [modal, setModal] = useState(false);
@@ -51,7 +52,6 @@ export default function Signup() {
                 <RightContainer>
                     <LoginContainer>
                         <LoginInfo>Start Chatting after Signup</LoginInfo>
-                        <p>{error}</p>
                         <Form>
                             <InputContainer>
                                 <TextInput
@@ -90,6 +90,7 @@ export default function Signup() {
                             >
                                 Login Now
                             </LoginButton>
+                            <p>{error}</p>
                             <ButtonContainer>
                                 <SubmitButton onClick={handleSubmit}>
                                     Create an Account
@@ -99,8 +100,8 @@ export default function Signup() {
                     </LoginContainer>
                 </RightContainer>
             </Container>
+            <BottomNav />
             {modal && <Login setModal={setModal} />}
-            {error && <SuccessModal error={error} />}
         </>
     );
 }
