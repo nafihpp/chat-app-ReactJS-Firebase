@@ -7,6 +7,9 @@ import { auth, db } from "../../firebase";
 import { updateDoc } from "firebase/firestore/lite";
 import { doc, Timestamp } from "firebase/firestore";
 import SuccessModal from "../includes/SuccessModal";
+import Cross from "../../assets/Cross.svg";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Login({ setModal }) {
     const [email, setEmail] = useState("");
@@ -24,11 +27,14 @@ export default function Login({ setModal }) {
             });
             navigate("/home");
         } catch (err) {
-            setError(err);
+            setError(err.message);
+            notify();
             setEmail("");
             setPassword("");
         }
     };
+    const emailRef = useRef(null);
+    const notify = () => toast("Error");
     function useOutsideClick(ref) {
         useEffect(() => {
             function handleClickOutside(event) {
@@ -44,10 +50,6 @@ export default function Login({ setModal }) {
     }
     const wrapperRef = useRef(null);
     useOutsideClick(wrapperRef);
-    const emailRef = useRef(null);
-    useEffect(() => {
-        emailRef.current.focus();
-    }, []);
     return (
         <>
             <Helmet>
@@ -58,9 +60,19 @@ export default function Login({ setModal }) {
                     <Container>
                         <RightContainer ref={wrapperRef}>
                             <LoginContainer>
-                                <LoginHeading>
-                                    Login to your Account
-                                </LoginHeading>
+                                <LoginHead>
+                                    <LoginHeading>Login</LoginHeading>
+                                    <CrossDiv
+                                        onClick={() => {
+                                            setModal(false);
+                                        }}
+                                    >
+                                        <CrossImg
+                                            src={Cross}
+                                            alt="Cross"
+                                        ></CrossImg>
+                                    </CrossDiv>
+                                </LoginHead>
                                 <LoginInfo>
                                     Enter email and password to login
                                 </LoginInfo>
@@ -109,10 +121,24 @@ export default function Login({ setModal }) {
                     </Container>
                 </Wrapper>
             </MainContainer>
+            {error && notify()}
         </>
     );
 }
-
+const CrossDiv = styled.a`
+    width: 7%;
+    cursor: pointer;
+`;
+const CrossImg = styled.img`
+    display: block;
+    width: 100%;
+`;
+const LoginHead = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 21px;
+`;
 const MainButtonContainer = styled.div`
     display: flex;
     justify-content: space-between;
@@ -165,7 +191,6 @@ const LoginContainer = styled.div`
 const LoginHeading = styled.h3`
     font-size: 27px;
     font-weight: bold;
-    margin-bottom: 20px;
     @media all and (max-width: 640px) {
         font-size: 22px;
     }

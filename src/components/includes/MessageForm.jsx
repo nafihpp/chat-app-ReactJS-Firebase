@@ -3,6 +3,7 @@ import { React, useState } from "react";
 import styled from "styled-components";
 import { auth, db } from "../../firebase";
 import MessageBox from "./MessageBox";
+
 function MessageForm({ chat, setChat }) {
     const [message, setMessage] = useState([]);
     const Sending = async (e) => {
@@ -13,7 +14,6 @@ function MessageForm({ chat, setChat }) {
         const id = user1 > user2 ? `${user1 + user2}` : `${user2 + user1}`;
         const createdAt = Timestamp.fromDate(new Date());
         const id2 = user1 + createdAt;
-
         if (message) {
             await setDoc(doc(db, `messages/${id}`, "chat", id2), {
                 message,
@@ -48,7 +48,7 @@ function MessageForm({ chat, setChat }) {
                         <DivRight>
                             <ChatType
                                 type="text"
-                                placeholder="start chatting now"
+                                placeholder="Start Typing now"
                                 onChange={(e) => setMessage(e.target.value)}
                             />
                             <ButtonSend onClick={Sending}>Send</ButtonSend>
@@ -74,7 +74,7 @@ const ButtonSend = styled.a`
     border: 1px solid black;
     border-radius: 4px;
     cursor: pointer;
-    width: 240px;
+    width: 179px;
     display: flex;
     align-items: center;
     justify-content: center;

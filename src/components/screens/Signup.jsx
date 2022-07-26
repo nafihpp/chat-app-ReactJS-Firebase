@@ -6,16 +6,23 @@ import { setDoc, doc, Timestamp } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import Login from "./Login";
-import SuccessModal from "../includes/SuccessModal";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Signup() {
     const [modal, setModal] = useState(false);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
+    const [error, setError] = useState([]);
     const [successModal, setSuccess] = useState(false);
-
+    const notify = () =>
+        toast.success("🦄 Wow so easy!", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+        });
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
@@ -36,10 +43,8 @@ export default function Signup() {
                 AccountCreated: Timestamp.fromDate(new Date()),
             });
         } catch (err) {
-            console.log(err);
-            setEmail("");
-            setPassword("");
-            setName("");
+            setError(err.message);
+            console.log(error);
         }
     };
     return (
@@ -51,6 +56,7 @@ export default function Signup() {
                 <RightContainer>
                     <LoginContainer>
                         <LoginInfo>Start Chatting after Signup</LoginInfo>
+                        <p>{error}</p>
                         <Form>
                             <InputContainer>
                                 <TextInput
@@ -90,7 +96,7 @@ export default function Signup() {
                                 Login Now
                             </LoginButton>
                             <ButtonContainer>
-                                <SubmitButton onClick={handleSubmit}>
+                                <SubmitButton onClick={notify()}>
                                     Create an Account
                                 </SubmitButton>
                             </ButtonContainer>
@@ -98,7 +104,7 @@ export default function Signup() {
                     </LoginContainer>
                 </RightContainer>
             </Container>
-            {modal && <Login />}
+            {modal && <Login setModal={setModal} />}
         </>
     );
 }
@@ -107,7 +113,6 @@ const Container = styled.div`
     flex-wrap: wrap;
     background: #fff;
     justify-content: space-between;
-    padding: 15px;
     height: 100vh;
     width: 100%;
     align-items: center;
