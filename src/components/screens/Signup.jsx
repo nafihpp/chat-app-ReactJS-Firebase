@@ -136,7 +136,7 @@ const RightContainer = styled.div`
 `;
 const LoginContainer = styled.div`
     border-bottom: 10px solid yellowgreen;
-    width: 100%;
+    width: 90%;
     height: 514px;
     color: #fff;
     background: black;
